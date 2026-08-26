@@ -4,6 +4,16 @@ Building a home lab that pushes live intrusion-detection alerts to my phone, the
 
 > **Scope note:** Every host in this writeup is my own equipment on an isolated, segmented lab network. Targets (Metasploitable 2, DVWA, OWASP Juice Shop) are systems purpose-built to be attacked for training. Nothing here touches any network or machine I don't own.
 
+## Demo
+
+
+https://github.com/user-attachments/assets/c2983b70-2b1c-40ab-b863-275cfb7a9fcc
+
+
+Recon to root on an isolated Metasploitable target — with my phone
+buzzing at every stage as Suricata catches it live.
+
+[VIDEO EMBEDS HERE]
 ---
 
 ## Table of Contents
