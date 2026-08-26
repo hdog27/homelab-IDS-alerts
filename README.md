@@ -1,6 +1,6 @@
 # Real-Time IDS Alerting Pipeline: Suricata → Pushover
 
-Building a home lab that pushes live intrusion-detection alerts to my phone, then validating it end-to-end by attacking my own intentionally vulnerable targets — including catching the successful root shell itself on the wire.
+Building a home lab that pushes live intrusion-detection alerts to my phone, then validating it end-to-end by attacking my own intentionally vulnerable targets, including catching the successful root shell itself on the wire.
 
 > **Scope note:** Every host in this writeup is my own equipment on an isolated, segmented lab network. Targets (Metasploitable 2, DVWA, OWASP Juice Shop) are systems purpose-built to be attacked for training. Nothing here touches any network or machine I don't own.
 
@@ -114,7 +114,7 @@ for line in new_lines:
 
 The result: alerts land on my phone as `TIME SENSITIVE` push notifications with the signature name, direction, and severity.
 
-**On the OPNsense shell:** OPNsense's console uses a restricted `tcsh` that mangles multi-line paste and heredocs. To deploy/edit the script reliably I base64-encoded it and decoded straight to disk, sidestepping the shell's paste quirks:
+**On the OPNsense shell:** OPNsense's console uses a restricted `tcsh` that mangles multi-line paste and heredocs. To deploy/edit the script reliably, I base64 encoded and decoded straight to disk, sidestepping the shell's paste quirks:
 
 ```sh
 echo '<base64-blob>' | openssl base64 -d -A > /usr/local/bin/suricata-pushover.py
@@ -126,7 +126,7 @@ echo '<base64-blob>' | openssl base64 -d -A > /usr/local/bin/suricata-pushover.p
 
 My OPNsense box only has 8GB of RAM, and Suricata was spiking memory hard enough to crash it — usually during a **rule reload**, when it briefly holds both the old and new rulesets in memory at once. Fewer rules = smaller spike.
 
-The key insight: **my lab is isolated, so IP/domain reputation feeds never fire.** Feeds like Feodo Tracker, ThreatFox, URLhaus, and the botnet C2 lists only match traffic to known-malicious *internet* infrastructure. My lab IPs aren't on any blocklist, so those rules produce **zero alerts while still consuming memory** on every reload.
+The key insight: **my lab is isolated, so IP/domain reputation feeds never fire.** Feeds like Feodo Tracker, ThreatFox, URLhaus, and the botnet C2 lists only match traffic to known malicious *internet* infrastructure. My lab IPs aren't on any blocklist, so those rules produce **zero alerts while still consuming memory** on every reload.
 
 **Rulesets removed** (reputation/blocklist feeds — no value in an isolated lab):
 - `abuse.ch/Feodo Tracker`, `abuse.ch/ThreatFox`, `abuse.ch/URLhaus`
@@ -140,7 +140,7 @@ The key insight: **my lab is isolated, so IP/domain reputation feeds never fire.
 - `emerging-web_server`, `emerging-remote_access`
 
 **Other memory levers:**
-- **Interface count matters.** Each interface Suricata inspects multiplies memory use. For an inter-VLAN lab I only need it on the one segment the attack traffic crosses — not WAN + every VLAN. This alone was a major stabilizer.
+- **Interface count matters.** Each interface Suricata inspects multiplies memory use. For an inter-VLAN lab, I only need it on the one segment the attack traffic crosses, not WAN + every VLAN. This alone was a major stabilizer.
 - Trimming ~22 rulesets down to ~9 removed the crash-on-reload behavior.
 
 ---
@@ -153,7 +153,7 @@ Two lessons landed here — one about how Suricata rules match, and one about my
 
 Most ET attack rules are **directional** — they match `$EXTERNAL_NET -> $HOME_NET`, and `EXTERNAL_NET` is defined as *everything not in* `HOME_NET`.
 
-In my setup the attacker (Kali) sits on a subnet **excluded** from `HOME_NET`, while the targets are inside it. So:
+In my setup, the attacker (Kali) sits on a subnet **excluded** from `HOME_NET`, while the targets are inside it. So:
 
 - Kali -> target reads as `EXTERNAL_NET -> HOME_NET` → **matches** the attack rules → alerts fire.
 
@@ -166,7 +166,7 @@ I also run CrowdSec on the firewall. Partway through testing, it auto-banned my 
 ![CrowdSec decisions list showing the Kali ban and the allowlist fix](crowdsec-ban.png)
 
 ```
-ID       Source     Scope:Value          Reason                                Action
+ID       Source     Scope: Value          Reason                                Action
 3804835  crowdsec   Ip:192.168.10.57     firewallservices/pf-scan-multi_ports  ban
 ```
 
