@@ -13,7 +13,7 @@ https://github.com/user-attachments/assets/c2983b70-2b1c-40ab-b863-275cfb7a9fcc
 Recon to root on an isolated Metasploitable target — with my phone
 buzzing at every stage as Suricata catches it live.
 
-[VIDEO EMBEDS HERE]
+
 ---
 
 ## Table of Contents
